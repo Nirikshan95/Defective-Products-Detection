@@ -1,0 +1,5 @@
+DATA_DIR="./data"
+ZIPFILE_PATH="./data/archive (6).zip"
+TRAINING_DATA="./data/casting_data/casting_data/train"
+TESTING_DATA="./data/casting_data/casting_data/test"
+PLOTS_PATH="./results/plots"
