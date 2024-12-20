@@ -22,12 +22,11 @@ for image,label in dt.scaled_test:
     pred=model.predict(image)
     y_pred.extend(np.argmax(pred,axis=1))
     y_true.extend(label.numpy())
+    
 #confution matrix
 sns.heatmap(confusion_matrix(y_true,y_pred),cmap='Greens',square=False)
 os.makedirs(os.path.dirname(config.PLOTS_PATH),exist_ok=True)
 plt.savefig(config.PLOTS_PATH+'/confusion_matrix.png')
-plt.show()
-plt.text(model.summary())
 plt.show()
 
 #classification report 
