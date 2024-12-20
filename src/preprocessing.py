@@ -3,7 +3,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.layers import Rescaling
 
 
 import config
@@ -28,7 +29,7 @@ class data:
         self.train_data=tf.keras.utils.image_dataset_from_directory(
             config.TRAINING_DATA,
             labels='inferred',
-            image_size=(224,224),
+            image_size=(128,128),
             shuffle=True,
             batch_size=32,
             seed=32
@@ -36,13 +37,31 @@ class data:
         self.test_data=tf.keras.utils.image_dataset_from_directory(
             config.TESTING_DATA,
             labels='inferred',
-            image_size=(224,224),
+            image_size=(128,128),
             shuffle=True,
             batch_size=32,
             seed=32
         )
         self.classes=self.train_data.class_names
-        return self.train_data,self.test_data
+        
+        #scaling
+        def scale_images(image,label):
+            rescaler=Rescaling(1./255)
+            image=rescaler(image)
+            return image,label
+        
+        self.scaled_train=self.train_data.map(scale_images)
+        self.scaled_test=self.test_data.map(scale_images)
+        
+        data_gen=ImageDataGenerator(
+        rescale=1.0/255,
+        rotation_range=30,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        zoom_range=0.2,
+        shear_range=0.2,
+        horizontal_flip=True,   
+        )
     
     def plot_sample(self):
         """
